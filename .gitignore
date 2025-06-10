@@ -1,0 +1,32 @@
+# Node modules (DO NOT TRACK THIS!)
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime files
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# dotenv environment files (SECRET KEYS should not be pushed)
+.env
+.env.*.local
+
+# Compiled output (TypeScript)
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Optional: VS Code settings
+.vscode/
+
+# Optional: OS-specific files
+.DS_Store
+Thumbs.db
