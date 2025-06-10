@@ -1,5 +1,20 @@
-# Node modules (DO NOT TRACK THIS!)
+# Node dependencies
 node_modules/
+
+# Build output
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Compiled JS files (if not using outDir)
+*.js
+*.js.map
+
+# Sass/CSS cache or compiled files (optional, depending on how you compile)
+*.css
+*.css.map
 
 # Logs
 logs/
@@ -8,25 +23,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Runtime files
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# dotenv environment files (SECRET KEYS should not be pushed)
+# Env variables
 .env
-.env.*.local
 
-# Compiled output (TypeScript)
-dist/
-build/
-out/
-*.tsbuildinfo
-
-# Optional: VS Code settings
+# IDE/editor config
 .vscode/
+.idea/
 
-# Optional: OS-specific files
+# OS-specific files
 .DS_Store
 Thumbs.db
+Desktop.ini
