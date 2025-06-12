@@ -3,14 +3,11 @@ import apiError from "../utils/apiErrors";
 import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema(
   {
-    firstName: {
+    fullName: {
       type: String,
       required: true,
     },
-    lastName: {
-      type: String,
-      required: true,
-    },
+    
     phoneNumber: {
       type: String,
       required: true,

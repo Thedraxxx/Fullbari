@@ -2,8 +2,7 @@ import apiError from "../utils/apiErrors";
 import User from "../model/user.model";
 
 const register = async(data: {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   phoneNumber: string;
   email: string;
   password: string;
@@ -13,18 +12,14 @@ const register = async(data: {
     if(data === undefined){
       throw new apiError(400,"undefined aairaxa");
     }
-    const { firstName, lastName, phoneNumber, email, password } = data;
-    if (!firstName || !lastName || !phoneNumber || !email || !password) {
-      throw new apiError(400, "These feild are required");
-    }
+    const { fullName, phoneNumber, email, password } = data;
     try {
       const existingUser = await User.findOne({ email: email });
       if (existingUser) {
         throw new apiError(400, "This user already exist.");
       }
       const user = await User.create({
-        firstName,
-        lastName,
+        fullName,
         phoneNumber,
         email,
         password,
