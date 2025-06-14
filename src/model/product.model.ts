@@ -47,7 +47,7 @@ const productScehma = new mongoose.Schema<IProduct>(
     prductCategory: {
       type: String,
       required: true,
-      enum: ["indoor", "outdoor", "succulent", "flowering", "airPurifier"], // add as needed
+      enum: ["indoor", "outdoor", "succulent", "flowering", "airPurifier"],
     },
     inStock: {
       type: Number,
