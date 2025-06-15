@@ -8,6 +8,7 @@ import uploadOnCloudnary from "../utils/cloudnary";
 
 const insertProduct = asyncHandler(async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
+  console.log(req.files);
   if (!files || files.length === 0) {
     throw new apiError(401, "Product images are required");
   }

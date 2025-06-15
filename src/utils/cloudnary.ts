@@ -1,6 +1,12 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
-
+import { envConfig } from "../config/cofig";
+ 
+cloudinary.config({
+    cloud_name: envConfig.cloud_name,
+    api_key: envConfig.cloud_api_key,
+    api_secret: envConfig.cloud_api_secret
+})
 const uploadOnCloudnary = async (
     localFilePath: string
 ): Promise<string | null> => {
