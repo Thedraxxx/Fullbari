@@ -27,13 +27,17 @@ const createProductService = async (data: IProduct) => {
     rating,
     numReviews,
   } = data;
-   
-  const existedProduct =  await Product.findOne({productName: productName});
-  if(existedProduct){
-    throw new apiError(401,"Product already exist.")
+
+  const slug = slugify(productName, { lower: true });
+
+  const existedProduct = await Product.findOne({
+    $or: [{ productName }, { slug }]
+  });
+
+  if (existedProduct) {
+    throw new apiError(401, "Product with this name or slug already exists.");
   }
 
-   const slug = slugify(productName,{lower: true})
   const product = await Product.create({
     productName,
     slug,

@@ -24,9 +24,9 @@ const productScehma = new mongoose.Schema<IProduct>(
     },
     slug: {
       type: String,
-      required: true,
       unique: true,
       lowercase: true,
+      required: true,
     },
     productPrice: {
       type: Number,
