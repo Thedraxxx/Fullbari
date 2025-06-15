@@ -2,20 +2,25 @@ import z from "zod";
 
 const productValidate = z.object({
   productName: z.string().min(2, "Product name is too short"),
-  productPrice: z.number().min(0, "Price must be at least 0"),
+  productPrice: z.coerce.number().min(0, "Price must be at least 0"),
   productDiscription: z.string().min(10, "Description is too short"),
-  productImage: z
-    .array(z.string().url("Invalid image URL"))
-    .min(1, "At least one image is required"),
+ productImage: z
+  .union([
+    z.string().url("Invalid image URL"),
+    z.array(z.string().url("Invalid image URL")),
+  ])
+  .transform((val) => (typeof val === "string" ? [val] : val))
+  .refine((arr) => arr.length > 0, { message: "At least one image is required" }),
+
   productDiscountPrice: z
-    .number()
+    .coerce.number()
     .min(0, "Discount must be positive")
     .optional(),
   prductCategory: z.string().min(1, "Category is required").toLowerCase(),
-  inStock: z.number().int().min(0, "Stock must be zero or more"),
-  isAvailable: z.boolean(),
-  rating: z.number().min(0).max(5),
-  numReviews: z.number().int().min(0),
+  inStock: z.coerce.number().int().min(0, "Stock must be zero or more"),
+  isAvailable: z.coerce.boolean(),
+  rating: z.coerce.number().min(0).max(5),
+  numReviews: z.coerce.number().optional().default(0),
   tags: z.array(z.string()).optional(),
 });
 
