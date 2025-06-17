@@ -8,13 +8,14 @@ import uploadOnCloudnary from "../utils/cloudnary";
 
 const insertProduct = asyncHandler(async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
-  console.log(req.files);
+
+  // console.log(req.files);
   if (!files || files.length === 0) {
     throw new apiError(401, "Product images are required");
   }
 
   const imagePaths = files.map((file) => file.path);
-  console.log("Uploaded paths:", imagePaths);
+  // console.log("Uploaded paths:", imagePaths);
 
   const uploadedURLs: string[] = [];
 
@@ -24,17 +25,17 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
       uploadedURLs.push(url);
     }
   }
-     console.log(uploadedURLs)
+
+  //  console.log(uploadedURLs)
   if (uploadedURLs.length === 0) {
     throw new apiError(401, "Failed to upload images to Cloudinary.");
   }
 
-  // ✅ Attach uploaded image URLs to req.body before validation
+  //  Attach uploaded image URLs to req.body before validation
   req.body.productImage = uploadedURLs;
 
-  // Coerce values like number, boolean etc. if needed (Zod can handle this)
   const validProduct = productValidate.parse(req.body);
-  console.log("Valid vayo ✅");
+  // console.log("Valid vayo");
 
   const productData = await createProductService(validProduct);
 
@@ -42,5 +43,38 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
     .status(200)
     .json(new apiResponse(200, productData, "Product inserted successfully"));
 });
+const fetchAllProduct = asyncHandler(async (req: Request, res: Response) => {
+  //first ma query string bata page, limits, query, sortBy, sortType lai destructure garne
+  //ani aggrigate query banaune 
+  //aggrigate query ma match, sort, skip, limit use garne
+  const {
+    page = 1,
+    limits = 10,
+    query = "",
+    categorry,
+    sort= "newest",
+    minPrice,
+    maxPrice,
+    minRating
+  } = req.query;
+  const matchStage: any = {
+      isAvailabel: true
+  }
+  if(query){
+    matchStage.productName = {$reges: query, $options: "i"}
+  }
+  if(categorry){
+    matchStage.prductCategory = categorry
+  }
+  if(minPrice || maxPrice){
+    matchStage.productPrice = {};
+    if(minPrice) matchStage.productPrice.$gre = Number(minPrice);
+    if(maxPrice) matchStage.productPrice.$lte = Number(maxPrice)
+  }
+  if(minRating){
+    matchStage.rating = {$gre: Number(minRating)}
+  }
 
-export { insertProduct };
+});
+
+export { insertProduct, fetchAllProduct };
