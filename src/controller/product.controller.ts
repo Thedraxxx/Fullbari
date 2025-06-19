@@ -50,7 +50,7 @@ const fetchAllProduct = asyncHandler(async (req: Request,res: Response)=>{
       //this is the public route ho...
       const validatedQueries = querySchema.parse(req.query);
 
-      // const products = getProductService(validatedQueries);
+      const products = getProductService(validatedQueries);
 
 //       const {
 //           queries = "", //search garda aauxa 

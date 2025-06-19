@@ -1,6 +1,6 @@
 
 import mongoose, {Document, Model} from "mongoose";
-interface IProduct extends Document{
+interface IProductDocument extends Document{
     productName: string;
     slug: string;  //SEO friendly banauna routes haruma use garinxa
     productPrice: number;
@@ -14,7 +14,7 @@ interface IProduct extends Document{
     numReviews: number;
     tags: string[];
 }
-const productScehma = new mongoose.Schema<IProduct>(
+const productScehma = new mongoose.Schema<IProductDocument>(
 {
     productName: {
       type: String,
@@ -72,6 +72,6 @@ const productScehma = new mongoose.Schema<IProduct>(
     },
 },{timestamps: true});
 
-const Product: Model<IProduct> = mongoose.model<IProduct>("Product",productScehma);
+const Product: Model<IProductDocument> = mongoose.model<IProductDocument>("Product",productScehma);
 
-export default Product;
+export {Product, IProductDocument};
