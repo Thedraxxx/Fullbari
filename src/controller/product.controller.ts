@@ -43,38 +43,59 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
     .status(200)
     .json(new apiResponse(200, productData, "Product inserted successfully"));
 });
-const fetchAllProduct = asyncHandler(async (req: Request, res: Response) => {
-  //first ma query string bata page, limits, query, sortBy, sortType lai destructure garne
-  //ani aggrigate query banaune 
-  //aggrigate query ma match, sort, skip, limit use garne
-  const {
-    page = 1,
-    limits = 10,
-    query = "",
-    categorry,
-    sort= "newest",
-    minPrice,
-    maxPrice,
-    minRating
-  } = req.query;
-  const matchStage: any = {
-      isAvailabel: true
-  }
-  if(query){
-    matchStage.productName = {$reges: query, $options: "i"}
-  }
-  if(categorry){
-    matchStage.prductCategory = categorry
-  }
-  if(minPrice || maxPrice){
-    matchStage.productPrice = {};
-    if(minPrice) matchStage.productPrice.$gre = Number(minPrice);
-    if(maxPrice) matchStage.productPrice.$lte = Number(maxPrice)
-  }
-  if(minRating){
-    matchStage.rating = {$gre: Number(minRating)}
-  }
 
-});
+const fetchAllProduct = asyncHandler(async (req: Request,res: Response)=>{
+      //user la queris halxa...
+      //yo queiris chi app huda trigger hunxa, user la search garda , search filter user garda with differnet category,
+      // ani differnt typs la sort garda chi yo queris haru trigger hunxa ...
+      //this is the public route ho...
+
+      const {
+          queris = "", //search garda aauxa 
+          page = 1, //kun page for pagination
+          limit = 10, 
+          category= "",
+          sort = "newest",
+          tags= "",
+      } = req.query;
+      //matching
+    const matchStage: any = {
+       isAvailable: true
+    }
+    if(queris){
+      matchStage.productName = { $regex: queris, $options: "i"}; //matching garxa regex la i=ignore
+    }
+    if(category){
+      matchStage.productCategory = category;
+    }
+    //sorting 
+    const sortStage: Record<string, 1|-1> = {}
+    if(sort){
+      switch(sort){
+            case "newest": 
+               sortStage.createdAt = -1;
+               break;
+            case "oldest":
+              sortStage.createdAt = 1;
+              break;
+            case "priceDesc": 
+              sortStage.productPrice = -1;
+              break;
+            case "priceAsc": 
+              sortStage.productPrice = 1;
+              break;
+            default:
+              sortStage.createdAt =-1;
+              break;
+      }
+    }
+    
+
+
+
+
+})
+
+
 
 export { insertProduct, fetchAllProduct };
