@@ -54,5 +54,7 @@ const createProductService = async (data: IProduct) => {
 
   return product;
 };
-
-export { createProductService };
+const getProductService = async () => {
+  
+}
+export { createProductService, getProductService };

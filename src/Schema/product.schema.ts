@@ -23,5 +23,11 @@ const productValidate = z.object({
   numReviews: z.coerce.number().optional().default(0),
   tags: z.array(z.string()).optional(),
 });
-
-export { productValidate };
+const querySchema = z.object({
+   queries: z.string().default('').transform(q => q.trim()),
+   page: z.coerce.number().int().min(1).max(100).default(1),
+   limit: z.coerce.number().int().min(1).max(50).default(10),
+   category: z.string().default('').transform(c => c.trim()),
+   sort: z.enum(["newest","oldest","priceDsc","priceAsc"]).default("newest").transform(s=> s.trim())
+})
+export { productValidate,querySchema };

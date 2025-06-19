@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler";
 import { Request, Response } from "express";
-import { productValidate } from "../Schema/product.schema";
-import { createProductService } from "../services/product.service";
+import { productValidate, querySchema } from "../Schema/product.schema";
+import { createProductService, getProductService } from "../services/product.service";
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
 import uploadOnCloudnary from "../utils/cloudnary";
@@ -25,7 +25,6 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
       uploadedURLs.push(url);
     }
   }
-
   //  console.log(uploadedURLs)
   if (uploadedURLs.length === 0) {
     throw new apiError(401, "Failed to upload images to Cloudinary.");
@@ -49,46 +48,59 @@ const fetchAllProduct = asyncHandler(async (req: Request,res: Response)=>{
       //yo queiris chi app huda trigger hunxa, user la search garda , search filter user garda with differnet category,
       // ani differnt typs la sort garda chi yo queris haru trigger hunxa ...
       //this is the public route ho...
+      const validatedQueries = querySchema.parse(req.query);
 
-      const {
-          queris = "", //search garda aauxa 
-          page = 1, //kun page for pagination
-          limit = 10, 
-          category= "",
-          sort = "newest",
-          tags= "",
-      } = req.query;
-      //matching
-    const matchStage: any = {
-       isAvailable: true
-    }
-    if(queris){
-      matchStage.productName = { $regex: queris, $options: "i"}; //matching garxa regex la i=ignore
-    }
-    if(category){
-      matchStage.productCategory = category;
-    }
-    //sorting 
-    const sortStage: Record<string, 1|-1> = {}
-    if(sort){
-      switch(sort){
-            case "newest": 
-               sortStage.createdAt = -1;
-               break;
-            case "oldest":
-              sortStage.createdAt = 1;
-              break;
-            case "priceDesc": 
-              sortStage.productPrice = -1;
-              break;
-            case "priceAsc": 
-              sortStage.productPrice = 1;
-              break;
-            default:
-              sortStage.createdAt =-1;
-              break;
-      }
-    }
+      // const products = getProductService(validatedQueries);
+
+//       const {
+//           queries = "", //search garda aauxa 
+//           page = "1", //kun page for pagination
+//           limit = "10", 
+//           category= "",
+//           sort = "newest",
+//           tags= "",
+//       } = req.query; 
+//       //matching
+// function safeParseInt(param: string | string[] | undefined, defaultValue: number): number {
+//   if (Array.isArray(param)) {
+//     return parseInt(param[0]) || defaultValue;
+//   }
+//   if (typeof param === "string") {
+//     return parseInt(param) || defaultValue;
+//   }
+//   return defaultValue;
+// }
+//   const pageNumber = safeParseInt(page, 1);
+//     const matchStage: any = {
+//        isAvailable: true
+//     }
+//     if(queris){
+//       matchStage.productName = { $regex: queris, $options: "i"}; //matching garxa regex la i=ignore
+//     }
+//     if(category){
+//       matchStage.productCategory = category;
+//     }
+//     //sorting 
+//     const sortStage: Record<string, 1|-1> = {}
+//     if(sort){
+//       switch(sort){
+//             case "newest": 
+//                sortStage.createdAt = -1;
+//                break;
+//             case "oldest":
+//               sortStage.createdAt = 1;
+//               break;
+//             case "priceDesc": 
+//               sortStage.productPrice = -1;
+//               break;
+//             case "priceAsc": 
+//               sortStage.productPrice = 1;
+//               break;
+//             default:
+//               sortStage.createdAt =-1;
+//               break;
+//       }
+//     }
     
 
 
