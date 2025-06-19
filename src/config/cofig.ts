@@ -14,6 +14,7 @@ export const envConfig = {
      
      cloud_name : process.env.CLOUDINARY_CLOUD_NAME,
      cloud_api_key : process.env.CLOUDINARY_API_KEY,
-     cloud_api_secret : process.env.CLOUDINARY_API_SECRET
-
+     cloud_api_secret : process.env.CLOUDINARY_API_SECRET,
+     
+     admin_password: process.env.ADMIN_PASSWORD,
 }
