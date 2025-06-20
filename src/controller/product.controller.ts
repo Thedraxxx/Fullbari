@@ -44,68 +44,16 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const fetchAllProduct = asyncHandler(async (req: Request,res: Response)=>{
-      //user la queris halxa...
-      //yo queiris chi app huda trigger hunxa, user la search garda , search filter user garda with differnet category,
-      // ani differnt typs la sort garda chi yo queris haru trigger hunxa ...
-      //this is the public route ho...
       const validatedQueries = querySchema.parse(req.query);
+      
+      const productData = await getProductService(validatedQueries);
+      if(!productData){
+        console.log("product data aaayana")
+      }
 
-      const products = getProductService(validatedQueries);
-
-//       const {
-//           queries = "", //search garda aauxa 
-//           page = "1", //kun page for pagination
-//           limit = "10", 
-//           category= "",
-//           sort = "newest",
-//           tags= "",
-//       } = req.query; 
-//       //matching
-// function safeParseInt(param: string | string[] | undefined, defaultValue: number): number {
-//   if (Array.isArray(param)) {
-//     return parseInt(param[0]) || defaultValue;
-//   }
-//   if (typeof param === "string") {
-//     return parseInt(param) || defaultValue;
-//   }
-//   return defaultValue;
-// }
-//   const pageNumber = safeParseInt(page, 1);
-//     const matchStage: any = {
-//        isAvailable: true
-//     }
-//     if(queris){
-//       matchStage.productName = { $regex: queris, $options: "i"}; //matching garxa regex la i=ignore
-//     }
-//     if(category){
-//       matchStage.productCategory = category;
-//     }
-//     //sorting 
-//     const sortStage: Record<string, 1|-1> = {}
-//     if(sort){
-//       switch(sort){
-//             case "newest": 
-//                sortStage.createdAt = -1;
-//                break;
-//             case "oldest":
-//               sortStage.createdAt = 1;
-//               break;
-//             case "priceDesc": 
-//               sortStage.productPrice = -1;
-//               break;
-//             case "priceAsc": 
-//               sortStage.productPrice = 1;
-//               break;
-//             default:
-//               sortStage.createdAt =-1;
-//               break;
-//       }
-//     }
-    
-
-
-
-
+      res.status(200).json(
+         new apiResponse(200,productData,"successfully fetched data")
+      )
 })
 
 

@@ -6,6 +6,6 @@ import upload from "../middleware/multer.middleware";
 const productRouter = Router();
 
 productRouter.route("/insertProduct").post(upload.array("productImage"),jwtVerify,isAdmin,insertProduct);
-productRouter.route("/fetchProduct").post(upload.none(),fetchAllProduct)
+productRouter.route("/fetchProduct").get(upload.none(),fetchAllProduct);
 
 export {productRouter};
