@@ -1,4 +1,4 @@
-import { Product, IProductDocument } from "model/product.model";
+import { Product, IProductDocument } from "../model/product.model";
 import slugify from "slugify";
 import apiError from "../utils/apiErrors";
 import { IQueries } from "Schema/product.schema";
@@ -69,14 +69,16 @@ const getProductService = async (query: IQueries) => {
 // – products + totalCount
 // – Pagination metadata banaera frontend lai pathauncha
   const { queries, page, limit, category, sort } = query;
+  console.log(queries);
        const matchStage: FilterQuery<IProductDocument> = {
           isAvailable: true,
        }
        if(queries){
-         matchStage.productName = queries;
+         matchStage.$text = {$search: queries};
+
        }
        if(category){
-        matchStage.prductCategory = category;
+        matchStage.$text = {$search: category};
        }
        const sortStage: Record<string, 1|-1> = {}
        if (sort) {
@@ -119,7 +121,7 @@ const getProductService = async (query: IQueries) => {
   const totalProduct = result.totalCount[0]?.count || 0;
   const products = result.products;
 
-  const totalPages = totalProduct/limitNumber;
+  const totalPages = Math.ceil(totalProduct/limitNumber);
   const hasPrevPage = 1 < pageNumber;
   const hasNextPage = totalPages > pageNumber;
 

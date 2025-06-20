@@ -20,7 +20,7 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       type: String,
       required: true,
       trim: true,
-      unique: true
+      unique: true,
     },
     slug: {
       type: String,
@@ -32,6 +32,7 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       type: Number,
       required: true,
       min: 0,
+      index: true
     },
     productDiscountPrice: {
       type: Number,
@@ -71,6 +72,20 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       default: [],
     },
 },{timestamps: true});
+productScehma.index({
+  productName:"text",
+  productDiscription: "text",
+  tags: "text"
+});
+productScehma.index({
+isAvailable: 1, 
+  rating: -1 
+})
+productScehma.index({ 
+  prductCategory: 1, 
+  isAvailable: 1, 
+  productPrice: 1 
+});
 
 const Product: Model<IProductDocument> = mongoose.model<IProductDocument>("Product",productScehma);
 
