@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import z from "zod";
 
 const productValidate = z.object({
@@ -42,7 +43,9 @@ const querySchema = z.object({
     .transform((s) => s.trim()),
 });
 const productIdSchema = z.object({
-    productId: z.string()
+    productId: z.string().min(1,"product id is required").refine((id)=> mongoose.Types.ObjectId.isValid(id),{
+      message: "Incvalid product Id formet"
+    })
 })
 export type IQueries = z.infer<typeof querySchema>;
 export type IProductId = z.infer<typeof productIdSchema>

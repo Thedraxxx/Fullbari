@@ -135,8 +135,10 @@ const getProductService = async (query: IQueries) => {
     },
   };
 };
-const getSingleProductService = async (ID: IProductId)=>{
-        const product = await Product.findById(ID);
+const getSingleProductService = async (params: IProductId)=>{
+        const { productId } = params;
+
+        const product = await Product.findById(productId).lean();
         if(!product){
           throw new apiError(400,"the product does not exist!");
         }

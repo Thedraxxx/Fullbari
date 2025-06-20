@@ -5,6 +5,7 @@ import { createProductService, getProductService, getSingleProductService } from
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
 import uploadOnCloudnary from "../utils/cloudnary";
+import { ZodError } from "zod";
 
 const insertProduct = asyncHandler(async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
@@ -51,13 +52,21 @@ const fetchAllProduct = asyncHandler(async (req: Request,res: Response)=>{
       )
 })
 const fetchSingleProduct = asyncHandler(async(req: Request, res: Response)=>{
-      const productId = productIdSchema.parse(req.params)
-       const productDetails = await getSingleProductService(productId);
-       return res.status(200).json(
-        new apiResponse(200,productDetails,"Single video is fetchd!")
-       )
+      try {
+        const validParams = productIdSchema.parse(req.params)
+         const productDetails = await getSingleProductService(validParams);
+         return res.status(200).json(
+          new apiResponse(200,productDetails,"Product fetched sucessfylly")
+         )
+      } catch (error) {
+         if(error instanceof ZodError){
+           throw new apiError(400," Invaldi product ID",)
+         }
+         else{
+          throw error;
+         }
+      }
 })
-
 
 
 export { insertProduct, fetchAllProduct, fetchSingleProduct };

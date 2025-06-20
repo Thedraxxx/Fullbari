@@ -7,6 +7,6 @@ const productRouter = Router();
 
 productRouter.route("/insertProduct").post(upload.array("productImage"),jwtVerify,isAdmin,insertProduct);
 productRouter.route("/fetchProduct").get(upload.none(),fetchAllProduct);
-productRouter.route("/:productId").get(upload.none(),fetchSingleProduct);
+productRouter.route("/fetchProduct/:productId").get(upload.none(),fetchSingleProduct);
 
 export {productRouter};
