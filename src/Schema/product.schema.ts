@@ -41,6 +41,9 @@ const querySchema = z.object({
     .default("newest")
     .transform((s) => s.trim()),
 });
+const productIdSchema = z.object({
+    productId: z.string()
+})
 export type IQueries = z.infer<typeof querySchema>;
-
-export { productValidate, querySchema };
+export type IProductId = z.infer<typeof productIdSchema>
+export { productValidate, querySchema, productIdSchema };

@@ -1,7 +1,7 @@
 import { Product, IProductDocument } from "../model/product.model";
 import slugify from "slugify";
 import apiError from "../utils/apiErrors";
-import { IQueries } from "Schema/product.schema";
+import { IQueries, IProductId } from "Schema/product.schema";
 import type { FilterQuery } from "mongoose";
 
 interface IProduct {
@@ -59,29 +59,28 @@ const createProductService = async (data: IProduct) => {
   return product;
 };
 const getProductService = async (query: IQueries) => {
-//   Frontend bata query aauxa
-// matchStage banauxa
-// sortStage banauxa
-// Pagination calculate garincha
-// Aggregation pipeline run garincha
-// – $match → $sort → $facet (products + totalCount)
-// Result destructure garincha
-// – products + totalCount
-// – Pagination metadata banaera frontend lai pathauncha
+  //   Frontend bata query aauxa
+  // matchStage banauxa
+  // sortStage banauxa
+  // Pagination calculate garincha
+  // Aggregation pipeline run garincha
+  // – $match → $sort → $facet (products + totalCount)
+  // Result destructure garincha
+  // – products + totalCount
+  // – Pagination metadata banaera frontend lai pathauncha
   const { queries, page, limit, category, sort } = query;
   console.log(queries);
-       const matchStage: FilterQuery<IProductDocument> = {
-          isAvailable: true,
-       }
-       if(queries){
-         matchStage.$text = {$search: queries};
-
-       }
-       if(category){
-        matchStage.$text = {$search: category};
-       }
-       const sortStage: Record<string, 1|-1> = {}
-       if (sort) {
+  const matchStage: FilterQuery<IProductDocument> = {
+    isAvailable: true,
+  };
+  if (queries) {
+    matchStage.$text = { $search: queries };
+  }
+  if (category) {
+    matchStage.$text = { $search: category };
+  }
+  const sortStage: Record<string, 1 | -1> = {};
+  if (sort) {
     switch (sort) {
       case "oldest":
         sortStage.createdAt = 1;
@@ -102,30 +101,30 @@ const getProductService = async (query: IQueries) => {
   } else {
     sortStage.create = -1;
   }
-  const safePage = Array.isArray(page)? page[0]: page ?? 1;
+  const safePage = Array.isArray(page) ? page[0] : page ?? 1;
   const pageNumber = parseInt(safePage.toString());
-  const limitNumber = limit ? parseInt(limit.toString()): 10;
-  const skip = (pageNumber -1) * limitNumber;
+  const limitNumber = limit ? parseInt(limit.toString()) : 10;
+  const skip = (pageNumber - 1) * limitNumber;
 
   const pipeline = [
-         {$match: matchStage},
-         {$sort: sortStage},
-         {
-          $facet: {
-                products: [{$skip: skip},{$limit: limitNumber}],
-                totalCount: [{$count: "count"}]
-          }
-        }
-      ]
-  const [result] = await Product.aggregate(pipeline)
+    { $match: matchStage },
+    { $sort: sortStage },
+    {
+      $facet: {
+        products: [{ $skip: skip }, { $limit: limitNumber }],
+        totalCount: [{ $count: "count" }],
+      },
+    },
+  ];
+  const [result] = await Product.aggregate(pipeline);
   const totalProduct = result.totalCount[0]?.count || 0;
   const products = result.products;
 
-  const totalPages = Math.ceil(totalProduct/limitNumber);
+  const totalPages = Math.ceil(totalProduct / limitNumber);
   const hasPrevPage = 1 < pageNumber;
   const hasNextPage = totalPages > pageNumber;
 
-  return{
+  return {
     products,
     pagination: {
       totalProduct,
@@ -133,7 +132,14 @@ const getProductService = async (query: IQueries) => {
       hasNextPage,
       hasPrevPage,
       limitNumber,
-    }
-  }
+    },
+  };
 };
-export { createProductService, getProductService };
+const getSingleProductService = async (ID: IProductId)=>{
+        const product = await Product.findById(ID);
+        if(!product){
+          throw new apiError(400,"the product does not exist!");
+        }
+        return product;
+} 
+export { createProductService, getProductService, getSingleProductService };

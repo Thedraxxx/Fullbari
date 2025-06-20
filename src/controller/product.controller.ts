@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler";
 import { Request, Response } from "express";
-import { productValidate, querySchema } from "../Schema/product.schema";
-import { createProductService, getProductService } from "../services/product.service";
+import { productValidate, querySchema, productIdSchema } from "../Schema/product.schema";
+import { createProductService, getProductService, getSingleProductService } from "../services/product.service";
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
 import uploadOnCloudnary from "../utils/cloudnary";
@@ -45,17 +45,19 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
 
 const fetchAllProduct = asyncHandler(async (req: Request,res: Response)=>{
       const validatedQueries = querySchema.parse(req.query);
-      
       const productData = await getProductService(validatedQueries);
-      if(!productData){
-        console.log("product data aaayana")
-      }
-
       res.status(200).json(
          new apiResponse(200,productData,"successfully fetched data")
       )
 })
+const fetchSingleProduct = asyncHandler(async(req: Request, res: Response)=>{
+      const productId = productIdSchema.parse(req.params)
+       const productDetails = await getSingleProductService(productId);
+       return res.status(200).json(
+        new apiResponse(200,productDetails,"Single video is fetchd!")
+       )
+})
 
 
 
-export { insertProduct, fetchAllProduct };
+export { insertProduct, fetchAllProduct, fetchSingleProduct };
