@@ -43,14 +43,13 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
     .status(200)
     .json(new apiResponse(200, productData, "Product inserted successfully"));
 });
-
 const fetchAllProduct = asyncHandler(async (req: Request,res: Response)=>{
       const validatedQueries = querySchema.parse(req.query);
       const productData = await getProductService(validatedQueries);
       res.status(200).json(
          new apiResponse(200,productData,"successfully fetched data")
       )
-})
+});
 const fetchSingleProduct = asyncHandler(async(req: Request, res: Response)=>{
       try {
         const validParams = productIdSchema.parse(req.params)
@@ -66,7 +65,11 @@ const fetchSingleProduct = asyncHandler(async(req: Request, res: Response)=>{
           throw error;
          }
       }
-})
+});
+const deleteProduct = asyncHandler(async (req: Request,res: Response)=>{
+      
+});
+
 
 
 export { insertProduct, fetchAllProduct, fetchSingleProduct };

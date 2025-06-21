@@ -12,7 +12,6 @@ const userRegister = asyncHandler(async (req: Request, res: Response) => {
     .status(201)
     .json(new apiResponse(200, userData, "User created Successfully"));
 });
-
 const userLogin = asyncHandler(async (req: Request, res: Response) => {
   const validateUser = loginValidate.parse(req.body);
   const { user, accessToken, refreshToken, options } = await login(
@@ -25,4 +24,7 @@ const userLogin = asyncHandler(async (req: Request, res: Response) => {
     .cookie("refreshToken", refreshToken, options)
     .json(new apiResponse(200,user,"user logged in successfylly"));
 });
+const userLogout = asyncHandler(async (req: Request,res: Response)=>{
+    
+})
 export { userRegister, userLogin };
