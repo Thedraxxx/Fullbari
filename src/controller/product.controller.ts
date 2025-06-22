@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler";
 import { Request, Response } from "express";
-import { productValidate, querySchema, productIdSchema } from "../Schema/product.schema";
-import { createProductService, getProductService, getSingleProductService,deleteProductService} from "../services/product.service";
+import { productValidate, querySchema, productIdSchema, updateProductSchema } from "../Schema/product.schema";
+import { createProductService, getProductService, getSingleProductService,deleteProductService, updateProductService} from "../services/product.service";
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
 import uploadOnCloudnary from "../utils/cloudnary";
@@ -72,10 +72,13 @@ const deleteProduct = asyncHandler(async (req: Request,res: Response)=>{
 
            return res.status(200).json(new apiResponse(200,deletedProduct,"Product deleted Successfully"))
 });
-const editProduct = asyncHandler(async(req: Request,res: Response)=>{
+const updateProduct = asyncHandler(async(req: Request,res: Response)=>{
+      const validatedProduct = updateProductSchema.parse(req.body);
+      const productId = productIdSchema.parse(req.params);
       
+      const updatedProduct = await updateProductService(validatedProduct,productId);
 })
 
 
 
-export { insertProduct, fetchAllProduct, fetchSingleProduct, deleteProduct, editProduct };
+export { insertProduct, fetchAllProduct, fetchSingleProduct, deleteProduct, updateProduct };

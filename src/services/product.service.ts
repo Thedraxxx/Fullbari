@@ -1,7 +1,7 @@
 import { Product, IProductDocument } from "../model/product.model";
 import slugify from "slugify";
 import apiError from "../utils/apiErrors";
-import { IQueries, IProductId } from "Schema/product.schema";
+import { IQueries, IProductId, IUpdateProduct } from "Schema/product.schema";
 import type { FilterQuery } from "mongoose";
 
 interface IProduct {
@@ -16,7 +16,7 @@ interface IProduct {
   numReviews: number;
   productDiscountPrice?: number | undefined;
   tags?: string[] | undefined;
-  isDeleted: boolean
+  isDeleted: boolean;
 }
 
 const createProductService = async (data: IProduct) => {
@@ -72,7 +72,8 @@ const getProductService = async (query: IQueries) => {
   const { queries, page, limit, category, sort } = query;
   console.log(queries);
   const matchStage: FilterQuery<IProductDocument> = {
-    isAvailable: true, isDeleted: false
+    isAvailable: true,
+    isDeleted: false,
   };
   if (queries) {
     matchStage.$text = { $search: queries };
@@ -136,21 +137,74 @@ const getProductService = async (query: IQueries) => {
     },
   };
 };
-const getSingleProductService = async (params: IProductId)=>{
-        const { productId } = params;
+const getSingleProductService = async (params: IProductId) => {
+  const { productId } = params;
 
-        const product = await Product.findById(productId).lean();
-        if(!product){
-          throw new apiError(400,"the product does not exist!");
-        }
-        return product;
-} 
-const deleteProductService = async (params: IProductId)=>{
+  const product = await Product.findById(productId).lean();
+  if (!product) {
+    throw new apiError(400, "the product does not exist!");
+  }
+  return product;
+};
+const deleteProductService = async (params: IProductId) => {
+  const deletedProduct = await Product.findByIdAndUpdate(params.productId, {
+    isDeleted: true,
+  }); //soft delete ...
+  if (!deletedProduct) {
+    throw new apiError(404, "Product not found or already deleted.");
+  }
+  return deletedProduct;
+};
+const updateProductService = async (
+  data: IUpdateProduct,
+  params: IProductId
+) => {
+  //     req.params → productId extract gara
+  //    req.body → updated fields receive gara
+  // Zod Validation → .partial() le optional banaune
+  // Destructure updated fields
+  // If productName cha → slug pani slugify() garera update gara
+  // findByIdAndUpdate → { new: true } le updated doc return garxa
+  // Return updated product to frontend
+  const {
+    productName,
+    productPrice,
+    productDiscription,
+    productImage,
+    productDiscountPrice,
+    prductCategory,
+    inStock,
+    isAvailable,
+  } = data;
 
-const deletedProduct = await Product.findByIdAndUpdate(params.productId,{ isDeleted: true}); //soft delete ...
- if(!deletedProduct){
-  throw new apiError(404,"Product not found or already deleted.");
- }
-return deletedProduct;
-}
-export { createProductService, getProductService, getSingleProductService,deleteProductService };
+  const product = Product.findById(params.productId);
+  if (!product) {
+    throw new apiError(400, "Product Not found.");
+  }
+  const updateData: Record<string,any> = {
+    productName,
+    productPrice,
+    productDiscription,
+    productImage,
+    productDiscountPrice,
+    prductCategory,
+    inStock,
+    isAvailable,
+  };
+  if(productName){
+       updateData.slug = slugify(productName,{lower: true})
+  }
+  const updatedProduct = await Product.findByIdAndUpdate(params.productId,{
+    $set: updateData
+  },{
+    new: true
+  });
+  return updateData;
+};
+export {
+  createProductService,
+  getProductService,
+  getSingleProductService,
+  deleteProductService,
+  updateProductService,
+};

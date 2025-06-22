@@ -48,6 +48,10 @@ const productIdSchema = z.object({
       message: "Incvalid product Id formet"
     })
 });
+
+export const updateProductSchema = productValidate.partial();
+export type IUpdateProduct = z.infer<typeof updateProductSchema>;
+
 export type IQueries = z.infer<typeof querySchema>;
-export type IProductId = z.infer<typeof productIdSchema>
+export type IProductId = z.infer<typeof productIdSchema>;
 export { productValidate, querySchema, productIdSchema };
