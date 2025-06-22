@@ -144,4 +144,12 @@ const getSingleProductService = async (params: IProductId)=>{
         }
         return product;
 } 
-export { createProductService, getProductService, getSingleProductService };
+const deleteProductService = async (params: IProductId)=>{
+
+const deletedProduct = await Product.findByIdAndDelete(params.productId);
+ if(!deletedProduct){
+  throw new apiError(404,"Product not found or already deleted.");
+ }
+return deletedProduct;
+}
+export { createProductService, getProductService, getSingleProductService,deleteProductService };
