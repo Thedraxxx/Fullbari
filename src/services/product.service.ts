@@ -193,17 +193,22 @@ const updateProductService = async (
     inStock,
     isAvailable,
   };
+  //removed undefinded field
     const cleanedUpdate = Object.fromEntries(
     Object.entries(updateData).filter(([_, v]) => v !== undefined)
   );
-  console.log(cleanedUpdate)
+   if (Object.keys(cleanedUpdate).length === 0) {
+    throw new apiError(400, "Atleat one field is required to update");
+  }
   if (cleanedUpdate.productName) {
     cleanedUpdate.slug = slugify(cleanedUpdate.productName, { lower: true });
   }
-
-  if (Object.keys(cleanedUpdate).length === 0) {
-    throw new apiError(400, "Atleat one field is required to update");
+  if(cleanedUpdate.inStock === 0){
+    cleanedUpdate.isAvailable =false;
   }
+   
+ 
+
   const updatedProduct = await Product.findByIdAndUpdate(
     params.productId,
     {

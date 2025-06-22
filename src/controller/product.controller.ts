@@ -87,8 +87,7 @@ const deleteProduct = asyncHandler(async (req: Request, res: Response) => {
     .json(new apiResponse(200, deletedProduct, "Product deleted Successfully"));
 });
 const updateProduct = asyncHandler(async (req: Request, res: Response) => {
-  console.log(req.body);
-  console.log(req.params);
+  
   const validatedProduct = updateProductSchema.parse(req.body);
   const productId = productIdSchema.parse(req.params);
 
