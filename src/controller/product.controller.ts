@@ -13,6 +13,7 @@ import {
   deleteProductService,
   updateProductService,
   restoreProductService,
+  fetchAllDeletedProduct,
 } from "../services/product.service";
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
@@ -100,6 +101,11 @@ const updateProduct = asyncHandler(async (req: Request, res: Response) => {
     .status(200)
     .json(new apiResponse(200, updatedProduct, "Product Updates successfully"));
 });
+const getDeletedProducts = asyncHandler(async(req:Request,res:Response)=>{
+
+     const deletedProducts = await fetchAllDeletedProduct();
+     return res.status(200).json(new apiResponse(200,deletedProducts,"Successfully fetch the delted product"))
+})
 const restoreProduct = asyncHandler(async (req: Request,res: Response)=>{
         const productId = productIdSchema.parse(req.params);
         const restoredProduct = await restoreProductService(productId);
@@ -113,5 +119,6 @@ export {
   fetchSingleProduct,
   deleteProduct,
   updateProduct,
-  restoreProduct
+  restoreProduct,
+  getDeletedProducts
 };

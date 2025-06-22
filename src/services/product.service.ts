@@ -218,6 +218,14 @@ const updateProductService = async (
   ).lean();
   return updatedProduct;
 };
+const fetchAllDeletedProduct= async()=>{
+   
+   const deletedProducts = await Product.find({isDeleted: true}).lean();
+   if(!deletedProducts || deletedProducts.length===0){
+    throw new apiError(404,"No deleted Product found")
+   }
+   return deletedProducts;
+}
 const restoreProductService = async (params: IProductId) => {
 
     const product = await Product.findById(params.productId);
@@ -239,6 +247,7 @@ const restoreProductService = async (params: IProductId) => {
     return restoredProduct;
 
 };
+
 export {
   createProductService,
   getProductService,
@@ -246,4 +255,5 @@ export {
   deleteProductService,
   updateProductService,
   restoreProductService,
+  fetchAllDeletedProduct
 };
