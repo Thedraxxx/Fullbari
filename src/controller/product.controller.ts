@@ -112,6 +112,9 @@ const restoreProduct = asyncHandler(async (req: Request,res: Response)=>{
         return res.status(200).json(new apiResponse(200,restoredProduct,"Product restored successfully."))
 
 });
+const hardDeleteProduct = asyncHandler(async(req:Request, res: Response)=>{
+       
+})
 
 export {
   insertProduct,
@@ -120,5 +123,6 @@ export {
   deleteProduct,
   updateProduct,
   restoreProduct,
-  getDeletedProducts
+  getDeletedProducts,
+  hardDeleteProduct
 };
