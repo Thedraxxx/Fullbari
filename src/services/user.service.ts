@@ -1,6 +1,5 @@
 import apiError from "../utils/apiErrors";
 import User from "../model/user.model";
-import { string } from "zod";
 import { envConfig } from "../config/cofig";
 import { CookieOptions } from "express";
 interface IUser {
