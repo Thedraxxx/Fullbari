@@ -1,5 +1,6 @@
 
 import mongoose, {Document, Model} from "mongoose";
+import { boolean } from "zod";
 interface IProductDocument extends Document{
     productName: string;
     slug: string;  //SEO friendly banauna routes haruma use garinxa
@@ -13,6 +14,7 @@ interface IProductDocument extends Document{
     rating: number;
     numReviews: number;
     tags: string[];
+    isDeleted: boolean
 }
 const productScehma = new mongoose.Schema<IProductDocument>(
 {
@@ -71,6 +73,10 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       type: [String],
       default: [],
     },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    }
 },{timestamps: true});
 productScehma.index({
   productName:"text",

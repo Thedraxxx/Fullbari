@@ -16,6 +16,7 @@ interface IProduct {
   numReviews: number;
   productDiscountPrice?: number | undefined;
   tags?: string[] | undefined;
+  isDeleted: boolean
 }
 
 const createProductService = async (data: IProduct) => {
@@ -71,7 +72,7 @@ const getProductService = async (query: IQueries) => {
   const { queries, page, limit, category, sort } = query;
   console.log(queries);
   const matchStage: FilterQuery<IProductDocument> = {
-    isAvailable: true,
+    isAvailable: true, isDeleted: false
   };
   if (queries) {
     matchStage.$text = { $search: queries };
@@ -146,7 +147,7 @@ const getSingleProductService = async (params: IProductId)=>{
 } 
 const deleteProductService = async (params: IProductId)=>{
 
-const deletedProduct = await Product.findByIdAndDelete(params.productId);
+const deletedProduct = await Product.findByIdAndUpdate(params.productId,{ isDeleted: true}); //soft delete ...
  if(!deletedProduct){
   throw new apiError(404,"Product not found or already deleted.");
  }

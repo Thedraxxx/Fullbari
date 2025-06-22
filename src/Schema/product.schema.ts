@@ -25,6 +25,7 @@ const productValidate = z.object({
   rating: z.coerce.number().min(0).max(5),
   numReviews: z.coerce.number().optional().default(0),
   tags: z.array(z.string()).optional(),
+  isDeleted: z.coerce.boolean(),
 });
 const querySchema = z.object({
   queries: z
