@@ -177,11 +177,13 @@ const updateProductService = async (
     isAvailable,
   } = data;
 
-  const product = Product.findById(params.productId);
+  const product = await Product.findById(params.productId);
   if (!product) {
-    throw new apiError(400, "Product Not found.");
+    throw new apiError(404, "Product Not found.");
   }
-  const updateData: Record<string,any> = {
+  // console.log(product)
+
+  const updateData: Record<string, any> = {
     productName,
     productPrice,
     productDiscription,
@@ -191,15 +193,27 @@ const updateProductService = async (
     inStock,
     isAvailable,
   };
-  if(productName){
-       updateData.slug = slugify(productName,{lower: true})
+  console.log(updateData);
+    const cleanedUpdate = Object.fromEntries(
+    Object.entries(updateData).filter(([_, v]) => v !== undefined)
+  );
+  if (cleanedUpdate.productName) {
+    updateData.slug = slugify(cleanedUpdate.productName, { lower: true });
   }
-  const updatedProduct = await Product.findByIdAndUpdate(params.productId,{
-    $set: updateData
-  },{
-    new: true
-  });
-  return updateData;
+
+  if (Object.keys(cleanedUpdate).length === 0) {
+    throw new apiError(401, "Atleat one field is required");
+  }
+  const updatedProduct = await Product.findByIdAndUpdate(
+    params.productId,
+    {
+      $set: cleanedUpdate,
+    },
+    {
+      new: true,
+    }
+  ).lean();
+  return updatedProduct;
 };
 export {
   createProductService,
