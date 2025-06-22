@@ -219,7 +219,7 @@ const updateProductService = async (
   return updatedProduct;
 };
 const restoreProductService = async (params: IProductId) => {
-  try {
+
     const product = await Product.findById(params.productId);
     if (!product) {
       throw new apiError(401, "Product not found");
@@ -237,9 +237,7 @@ const restoreProductService = async (params: IProductId) => {
       }
     );
     return restoredProduct;
-  } catch (error) {
-     throw new apiError(400,"Faild to restore Product.")
-  }
+
 };
 export {
   createProductService,
