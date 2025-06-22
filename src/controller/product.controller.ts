@@ -12,6 +12,7 @@ import {
   getSingleProductService,
   deleteProductService,
   updateProductService,
+  restoreProductService,
 } from "../services/product.service";
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
@@ -81,7 +82,7 @@ const fetchSingleProduct = asyncHandler(async (req: Request, res: Response) => {
 const deleteProduct = asyncHandler(async (req: Request, res: Response) => {
   const validateId = productIdSchema.parse(req.params);
   const deletedProduct = await deleteProductService(validateId);
-
+        
   return res
     .status(200)
     .json(new apiResponse(200, deletedProduct, "Product deleted Successfully"));
@@ -99,6 +100,16 @@ const updateProduct = asyncHandler(async (req: Request, res: Response) => {
     .status(200)
     .json(new apiResponse(200, updatedProduct, "Product Updates successfully"));
 });
+const restoreProduct = asyncHandler(async (req: Request,res: Response)=>{
+         //firs ma id aaua kun restore garna ..
+        // find by id 
+        //if exist xa vana chi isDelete lai false garna 
+        //ani save garna ra return garna 
+        const productId = productIdSchema.parse(req.params);
+        const restoredProduct = await restoreProductService(productId);
+
+
+});
 
 export {
   insertProduct,
@@ -106,4 +117,5 @@ export {
   fetchSingleProduct,
   deleteProduct,
   updateProduct,
+  restoreProduct
 };

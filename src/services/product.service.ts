@@ -194,20 +194,18 @@ const updateProductService = async (
     isAvailable,
   };
   //removed undefinded field
-    const cleanedUpdate = Object.fromEntries(
+  const cleanedUpdate = Object.fromEntries(
     Object.entries(updateData).filter(([_, v]) => v !== undefined)
   );
-   if (Object.keys(cleanedUpdate).length === 0) {
+  if (Object.keys(cleanedUpdate).length === 0) {
     throw new apiError(400, "Atleat one field is required to update");
   }
   if (cleanedUpdate.productName) {
     cleanedUpdate.slug = slugify(cleanedUpdate.productName, { lower: true });
   }
-  if(cleanedUpdate.inStock === 0){
-    cleanedUpdate.isAvailable =false;
+  if (cleanedUpdate.inStock === 0) {
+    cleanedUpdate.isAvailable = false;
   }
-   
- 
 
   const updatedProduct = await Product.findByIdAndUpdate(
     params.productId,
@@ -220,10 +218,14 @@ const updateProductService = async (
   ).lean();
   return updatedProduct;
 };
+const restoreProductService = async(params: IProductId) =>{
+    
+}
 export {
   createProductService,
   getProductService,
   getSingleProductService,
   deleteProductService,
   updateProductService,
+  restoreProductService
 };
