@@ -218,14 +218,34 @@ const updateProductService = async (
   ).lean();
   return updatedProduct;
 };
-const restoreProductService = async(params: IProductId) =>{
-    
-}
+const restoreProductService = async (params: IProductId) => {
+  try {
+    const product = await Product.findById(params.productId);
+    if (!product) {
+      throw new apiError(401, "Product not found");
+    }
+    if (product.isDeleted === false) {
+      throw new apiError(409, "Prodcut is alredy active");
+    }
+    const restoredProduct = await Product.findByIdAndUpdate(
+      params.productId,
+      {
+        $set: { isDeleted: false },
+      },
+      {
+        new: true,
+      }
+    );
+    return restoredProduct;
+  } catch (error) {
+     throw new apiError(400,"Faild to restore Product.")
+  }
+};
 export {
   createProductService,
   getProductService,
   getSingleProductService,
   deleteProductService,
   updateProductService,
-  restoreProductService
+  restoreProductService,
 };
