@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { insertProduct, fetchAllProduct, fetchSingleProduct, deleteProduct } from "../controller/product.controller";
+import { insertProduct, fetchAllProduct, fetchSingleProduct, deleteProduct, editProduct } from "../controller/product.controller";
 import jwtVerify from "../middleware/auth.middleware";
 import isAdmin from "../middleware/roles.middleware";
 import upload from "../middleware/multer.middleware";

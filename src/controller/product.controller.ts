@@ -72,7 +72,10 @@ const deleteProduct = asyncHandler(async (req: Request,res: Response)=>{
 
            return res.status(200).json(new apiResponse(200,deletedProduct,"Product deleted Successfully"))
 });
+const editProduct = asyncHandler(async(req: Request,res: Response)=>{
+      
+})
 
 
 
-export { insertProduct, fetchAllProduct, fetchSingleProduct, deleteProduct };
+export { insertProduct, fetchAllProduct, fetchSingleProduct, deleteProduct, editProduct };
