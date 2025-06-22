@@ -101,13 +101,9 @@ const updateProduct = asyncHandler(async (req: Request, res: Response) => {
     .json(new apiResponse(200, updatedProduct, "Product Updates successfully"));
 });
 const restoreProduct = asyncHandler(async (req: Request,res: Response)=>{
-         //firs ma id aaua kun restore garna ..
-        // find by id 
-        //if exist xa vana chi isDelete lai false garna 
-        //ani save garna ra return garna 
         const productId = productIdSchema.parse(req.params);
         const restoredProduct = await restoreProductService(productId);
-
+        return res.status(200).json(new apiResponse(200,restoredProduct,"Product restored successfully."))
 
 });
 
