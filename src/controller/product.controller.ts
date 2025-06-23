@@ -18,7 +18,7 @@ import {
 } from "../services/product.service";
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
-import uploadOnCloudnary from "../utils/cloudnary";
+import { uploadOnCloudnary } from "../utils/cloudnary";
 import { ZodError } from "zod";
 
 const insertProduct = asyncHandler(async (req: Request, res: Response) => {
@@ -121,7 +121,7 @@ const hardDeleteProduct = asyncHandler(async(req:Request, res: Response)=>{
        //retrun the product is delete message...
        const productId = productIdSchema.parse(req.params);
        const deletedProduct = await hardDeleteService(productId);
-       return res.status(200).json(new apiResponse(200,deleteProduct,"product parmanently deleted"));
+       return res.status(200).json(new apiResponse(200,deletedProduct,"product parmanently deleted"));
 })
 
 export {

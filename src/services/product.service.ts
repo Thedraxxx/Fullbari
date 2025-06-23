@@ -3,7 +3,8 @@ import slugify from "slugify";
 import apiError from "../utils/apiErrors";
 import { IQueries, IProductId, IUpdateProduct } from "Schema/product.schema";
 import type { FilterQuery } from "mongoose";
-
+import { getPublicIdsFromUrls } from "../utils/cloudnary";
+import {v2 as cloudnary} from "cloudinary"
 interface IProduct {
   productName: string;
   productPrice: number;
@@ -247,7 +248,26 @@ const restoreProductService = async (params: IProductId) => {
     return restoredProduct;
 
 };
-
+const hardDeleteService = async(params: IProductId)=>{
+     const product = await Product.findById(params.productId);
+     if(!product){
+      throw new apiError(404,"Product is not Found.");
+     }
+     if(product.isDeleted === false){
+       throw new apiError(400,"Product is not softly deleted")
+     }
+     const imagePublicIds = getPublicIdsFromUrls(product.productImage);
+     for(const publicId of imagePublicIds){
+      try {
+          await cloudnary.uploader.destroy(publicId);
+      } catch (error) {
+         console.error(`Failed to delete image ${publicId} from Cloudinary.`, error);
+         throw new apiError(401,"faild to delte the image form cloudnary")
+      }
+     }
+     const deleteProduct = await Product.findByIdAndDelete(params.productId);
+     return deleteProduct;
+}
 export {
   createProductService,
   getProductService,
@@ -255,5 +275,6 @@ export {
   deleteProductService,
   updateProductService,
   restoreProductService,
-  fetchAllDeletedProduct
+  fetchAllDeletedProduct,
+  hardDeleteService
 };

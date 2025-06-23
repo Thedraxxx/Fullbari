@@ -45,4 +45,15 @@ const uploadOnCloudnary = async (
     }
 };
 
-export default uploadOnCloudnary;
+const getPublicIdsFromUrls = (urls: string[]): string[] => {
+  return urls.map((url) => {
+    const parts = url.split("/");
+    const fileWithExt = parts[parts.length - 1];
+    const folder = parts[parts.length - 2];
+
+    const publicId = `${folder}/${fileWithExt.split(".")[0]}`;
+    return publicId;
+  });
+};
+
+export {uploadOnCloudnary, getPublicIdsFromUrls};

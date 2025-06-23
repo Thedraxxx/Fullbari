@@ -12,5 +12,5 @@ productRouter.route("/deleteProduct/:productId").delete(upload.none(),jwtVerify,
 productRouter.route("/updateProduct/:productId").patch(upload.none(),jwtVerify,isAdmin,updateProduct);
 productRouter.route("/restoreProduct/:productId").patch(upload.none(),jwtVerify,isAdmin,restoreProduct);
 productRouter.route("/getDeletedProducts").get(upload.none(),jwtVerify,isAdmin,getDeletedProducts);
-productRouter.route("/hardDeleteProduct").delete(upload.none(),jwtVerify,isAdmin,hardDeleteProduct)
+productRouter.route("/hardDeleteProduct/:productId").delete(upload.none(),jwtVerify,isAdmin,hardDeleteProduct)
 export {productRouter};
