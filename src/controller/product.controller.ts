@@ -14,6 +14,7 @@ import {
   updateProductService,
   restoreProductService,
   fetchAllDeletedProduct,
+  hardDeleteService
 } from "../services/product.service";
 import apiResponse from "../utils/apiResponse";
 import apiError from "../utils/apiErrors";
@@ -113,7 +114,14 @@ const restoreProduct = asyncHandler(async (req: Request,res: Response)=>{
 
 });
 const hardDeleteProduct = asyncHandler(async(req:Request, res: Response)=>{
-       
+       //id aauaca params bata ...
+       //find the product by the id and delete it...
+       //before delete chekr the flag in isDelete...
+       //find the image in the cloudnary and deltete the image also form the cloudnary ....
+       //retrun the product is delete message...
+       const productId = productIdSchema.parse(req.params);
+       const deletedProduct = await hardDeleteService(productId);
+       return res.status(200).json(new apiResponse(200,deleteProduct,"product parmanently deleted"));
 })
 
 export {
