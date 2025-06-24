@@ -1,8 +1,14 @@
 
 
 import mongoose from "mongoose";
-
-const categorySchema = new mongoose.Schema({
+import { Model } from "mongoose";
+  interface IExtendDocument extends Document{
+     categoryName: string,
+     slug: string,
+     discription: string,
+     isActive: boolean
+  }
+const categorySchema= new mongoose.Schema<IExtendDocument> ({
     categoryName: {
         type: String,
         required: true,
@@ -20,6 +26,6 @@ const categorySchema = new mongoose.Schema({
     }
 },{timestamps: true});
 
-const Category = mongoose.model("categories",categorySchema);
+const Category: Model<IExtendDocument> = mongoose.model<IExtendDocument>("categories",categorySchema);
 
 export default Category;
