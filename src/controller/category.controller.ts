@@ -23,5 +23,6 @@ const updateCategory = asyncHandler(async(req: Request,res: Response)=>{
       const ValidData = updateCategorySchema.parse(req.body);
 
       const updatedData = await updateCategoryService(validId,ValidData);
+      return res.status(200).json(new apiResponse(200,updatedData,"Category successfully Updated"))
 })
-export {createCategory, getAllCategory, getSingleCategory};
+export {createCategory, getAllCategory, getSingleCategory, updateCategory};

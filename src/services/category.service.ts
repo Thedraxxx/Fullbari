@@ -2,6 +2,7 @@ import apiError from "../utils/apiErrors";
 import Category from "../model/category.model";
 import { ICategory,ICategoryId, IUpdateCategory } from "../Schema/category.schema";
 import slugify from "slugify";
+import { date } from "zod";
 
 
 const createCategoryService = async(data: ICategory)=>
@@ -30,6 +31,35 @@ const getSingleCategoryService = async(params: ICategoryId)=>{
         return category;
 }
 const updateCategoryService = async(params: ICategoryId,data: IUpdateCategory )=>{
-       
+      const { categoryId } = params;
+      const {categoryName, discription} = data;  
+       const category = await Category.findById(categoryId);
+       if(!category){
+            throw new apiError(404,"Categoryu not found!");
+       }
+      const updateData: Record<string , any> = {
+            categoryName,
+            discription,
+           
+      };
+    const cleanData =  Object.fromEntries( Object.entries(updateData).filter(([_, v]) => v !== undefined));
+    if(Object.keys(cleanData).length === 0){
+      throw new apiError(401,"at least 1 field is required to update data")
+    }
+    if(cleanData.categoryName){
+      cleanData.slug = slugify(cleanData.categoryName,{lower: true});
+    }
+    const updatedResponse = await Category.findByIdAndUpdate(params.categoryId,{
+      $set: cleanData
+    },{
+      new: true
+    });
+    if(!updateCategoryService){
+      throw new apiError(401,"falid to update")
+    }
+    return updatedResponse;
+
+
+
 }
 export {createCategoryService, getAllCategoryService, getSingleCategoryService, updateCategoryService}
