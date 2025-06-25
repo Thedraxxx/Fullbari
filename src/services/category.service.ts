@@ -15,5 +15,9 @@ const createCategoryService = async(data: ICategory)=>
         return category;
 
 }
+const getAllCategoryService = async()=>{
+       const categories = Category.find({isActive: true}).select("categoryName discription");
+       return categories;
+}
 
-export {createCategoryService}
+export {createCategoryService, getAllCategoryService}
