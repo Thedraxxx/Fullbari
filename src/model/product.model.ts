@@ -8,7 +8,7 @@ interface IProductDocument extends Document{
     productDiscription: string;
     productImage: string[];
     productDiscountPrice?: number;
-    prductCategory: string;
+    productCategory: string;
     inStock: number;
     isAvailable: boolean;
     rating: number;
@@ -48,7 +48,7 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       type: [String], // Cloudinary URLs
       required: true,
     },
-    prductCategory: {
+    productCategory: {
       type: String,
       required: true,
       enum: ["indoor", "outdoor", "succulent", "flowering", "airPurifier"],
@@ -88,7 +88,7 @@ isAvailable: 1,
   rating: -1 
 })
 productScehma.index({ 
-  prductCategory: 1, 
+  productCategor: 1, 
   isAvailable: 1, 
   productPrice: 1 
 });
