@@ -62,10 +62,27 @@ const updateCategoryService = async(params: ICategoryId,data: IUpdateCategory )=
 
 
 }
-const deleteCategoryService = async()=>{
-  
+const deleteCategoryService = async(params: ICategoryId)=>{
+    
+      const deletedCategory = await Category.findByIdAndUpdate(params.categoryId,{
+        isActive: false
+      },{
+        new: true
+      });
+      if(!deletedCategory){
+        throw new apiError(401,"faild to delete catogory");
+      }
+      return deletedCategory;
 }
-const restoreCategoryService = async()=>{
-
+const restoreCategoryService = async(params: ICategoryId)=>{
+       const restoredCategory = await Category.findByIdAndUpdate(params.categoryId,{
+        isActive: true
+       },{
+        new: true
+       });
+       if(!restoredCategory){
+         throw new apiError(401,"faild to restore catogory");
+       }
+       return restoredCategory;
 }
 export {createCategoryService, getAllCategoryService, getSingleCategoryService, updateCategoryService, deleteCategoryService,restoreCategoryService}
