@@ -2,7 +2,7 @@ import express from "express";
 import errorHandler from "./src/middleware/errorHandler";
 import userRouter from "./src/routes/user.routes";
 import { productRouter } from "./src/routes/product.routes";
-import categoryRouter from "routes/category.routes";
+import categoryRouter from "./src/routes/category.routes";
 const app = express();
 
 app.use(express.json({limit: "1mb"}));

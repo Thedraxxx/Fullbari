@@ -1,4 +1,4 @@
-import Category from "model/category.model";
+import Category from "../model/category.model";
 import { ICategory } from "../Schema/category.schema";
 import slugify from "slugify";
 
