@@ -24,5 +24,11 @@ const updateCategory = asyncHandler(async(req: Request,res: Response)=>{
 
       const updatedData = await updateCategoryService(validId,ValidData);
       return res.status(200).json(new apiResponse(200,updatedData,"Category successfully Updated"))
-})
-export {createCategory, getAllCategory, getSingleCategory, updateCategory};
+});
+const deleteCategory = asyncHandler(async(req: Request,res: Response)=>{
+      
+});
+const restoreCategory = asyncHandler(async(req: Request,res: Response)=>{
+      
+});
+export {createCategory, getAllCategory, getSingleCategory, updateCategory, deleteCategory, restoreCategory};

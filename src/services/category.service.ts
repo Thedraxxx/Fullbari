@@ -62,4 +62,10 @@ const updateCategoryService = async(params: ICategoryId,data: IUpdateCategory )=
 
 
 }
-export {createCategoryService, getAllCategoryService, getSingleCategoryService, updateCategoryService}
+const deleteCategoryService = async()=>{
+  
+}
+const restoreCategoryService = async()=>{
+
+}
+export {createCategoryService, getAllCategoryService, getSingleCategoryService, updateCategoryService, deleteCategoryService,restoreCategoryService}
