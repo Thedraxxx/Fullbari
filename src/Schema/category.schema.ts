@@ -13,6 +13,9 @@ export const categoryIdSchema = z.object({
       message: "Invalid Category ID format",
     }),
 });
+const updateCategorySchema = categoryValidate.partial();
+export type IUpdateCategory = z.infer<typeof updateCategorySchema>
+
 export type ICategoryId =z.infer< typeof categoryIdSchema>
 export type ICategory = z.infer<typeof categoryValidate>;
-export {categoryValidate}
+export {categoryValidate, updateCategorySchema}

@@ -1,6 +1,6 @@
 import apiError from "../utils/apiErrors";
 import Category from "../model/category.model";
-import { ICategory,ICategoryId } from "../Schema/category.schema";
+import { ICategory,ICategoryId, IUpdateCategory } from "../Schema/category.schema";
 import slugify from "slugify";
 
 
@@ -29,5 +29,7 @@ const getSingleCategoryService = async(params: ICategoryId)=>{
         }
         return category;
 }
-
-export {createCategoryService, getAllCategoryService, getSingleCategoryService}
+const updateCategoryService = async(params: ICategoryId,data: IUpdateCategory )=>{
+       
+}
+export {createCategoryService, getAllCategoryService, getSingleCategoryService, updateCategoryService}
