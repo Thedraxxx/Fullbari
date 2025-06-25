@@ -1,5 +1,6 @@
+import apiError from "../utils/apiErrors";
 import Category from "../model/category.model";
-import { ICategory } from "../Schema/category.schema";
+import { ICategory,ICategoryId } from "../Schema/category.schema";
 import slugify from "slugify";
 
 
@@ -19,5 +20,14 @@ const getAllCategoryService = async()=>{
        const categories = Category.find({isActive: true}).select("categoryName discription");
        return categories;
 }
+const getSingleCategoryService = async(params: ICategoryId)=>{
+     const {categoryId} = params
+        const category = await Category.findById(categoryId);
+        console.log(category)
+        if(!category){
+          throw new apiError(401,"category not found")
+        }
+        return category;
+}
 
-export {createCategoryService, getAllCategoryService}
+export {createCategoryService, getAllCategoryService, getSingleCategoryService}
