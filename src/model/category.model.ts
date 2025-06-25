@@ -27,6 +27,6 @@ const categorySchema= new mongoose.Schema<IExtendDocument> ({
     }
 },{timestamps: true});
 
-const Category: Model<IExtendDocument> = mongoose.model<IExtendDocument>("categories",categorySchema);
+const Category: Model<IExtendDocument> = mongoose.model<IExtendDocument>("Category",categorySchema);
 
 export default Category;

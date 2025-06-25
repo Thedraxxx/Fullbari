@@ -23,7 +23,7 @@ import { ZodError } from "zod";
 
 const insertProduct = asyncHandler(async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
-
+  //  console.log(req.body)
   // console.log(req.files);
   if (!files || files.length === 0) {
     throw new apiError(401, "Product images are required");

@@ -1,5 +1,5 @@
 
-import mongoose, {Document, Model} from "mongoose";
+import mongoose, {Document, Model, ObjectId, Types} from "mongoose";
 import { boolean } from "zod";
 interface IProductDocument extends Document{
     productName: string;
@@ -8,7 +8,7 @@ interface IProductDocument extends Document{
     productDiscription: string;
     productImage: string[];
     productDiscountPrice?: number;
-    productCategory: string;
+    productCategory: Types.ObjectId;
     inStock: number;
     isAvailable: boolean;
     rating: number;
@@ -49,9 +49,9 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       required: true,
     },
     productCategory: {
-      type: String,
-      required: true,
-      enum: ["indoor", "outdoor", "succulent", "flowering", "airPurifier"],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true
     },
     inStock: {
       type: Number,
@@ -88,7 +88,7 @@ isAvailable: 1,
   rating: -1 
 })
 productScehma.index({ 
-  productCategor: 1, 
+  productCategory: 1, 
   isAvailable: 1, 
   productPrice: 1 
 });

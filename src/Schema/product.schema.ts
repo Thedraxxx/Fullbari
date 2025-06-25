@@ -19,7 +19,10 @@ const productValidate = z.object({
     .number()
     .min(0, "Discount must be positive")
     .optional(),
-  prductCategory: z.string().min(1, "Category is required").toLowerCase(),
+  productCategory: z.string({ required_error: "Category is required" })
+  .min(1, "Category is required")
+  .regex(/^[0-9a-fA-F]{24}$/, "Invalid category ID"),
+
   inStock: z.coerce.number().int().min(0, "Stock must be zero or more"),
   isAvailable: z.coerce.boolean(),
   rating: z.coerce.number().min(0).max(5),

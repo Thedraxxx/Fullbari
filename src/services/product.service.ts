@@ -10,7 +10,7 @@ interface IProduct {
   productPrice: number;
   productDiscription: string;
   productImage: string[];
-  prductCategory: string;
+  productCategory: string;
   inStock: number;
   isAvailable: boolean;
   rating: number;
@@ -27,13 +27,13 @@ const createProductService = async (data: IProduct) => {
     productDiscription,
     productImage,
     productDiscountPrice,
-    prductCategory,
+    productCategory,
     inStock,
     isAvailable,
     rating,
     numReviews,
   } = data;
-
+  
   const slug = slugify(productName, { lower: true });
 
   const existedProduct = await Product.findOne({
@@ -51,14 +51,16 @@ const createProductService = async (data: IProduct) => {
     productDiscription,
     productImage,
     productDiscountPrice,
-    prductCategory,
+    productCategory,
     inStock,
     isAvailable,
     rating,
     numReviews,
   });
 
-  return product;
+  const productData = Product.findById(product._id).populate("productCategory","categoryName discription isActive");
+
+  return productData;
 };
 const getProductService = async (query: IQueries) => {
   //   Frontend bata query aauxa
@@ -173,7 +175,7 @@ const updateProductService = async (
     productDiscription,
     productImage,
     productDiscountPrice,
-    prductCategory,
+    productCategory,
     inStock,
     isAvailable,
   } = data;
@@ -190,7 +192,7 @@ const updateProductService = async (
     productDiscription,
     productImage,
     productDiscountPrice,
-    prductCategory,
+    productCategory,
     inStock,
     isAvailable,
   };
