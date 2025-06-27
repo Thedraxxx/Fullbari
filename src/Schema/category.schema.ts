@@ -12,7 +12,7 @@ export const categoryIdSchema = z.object({
     .refine((id) => mongoose.Types.ObjectId.isValid(id), {
       message: "Invalid Category ID format",
     }),
-});
+} );
 const updateCategorySchema = categoryValidate.partial();
 export type IUpdateCategory = z.infer<typeof updateCategorySchema>
 

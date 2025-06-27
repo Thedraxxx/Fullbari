@@ -2,7 +2,7 @@ import apiError from "../utils/apiErrors";
 import Category from "../model/category.model";
 import { ICategory,ICategoryId, IUpdateCategory } from "../Schema/category.schema";
 import slugify from "slugify";
-import { date } from "zod";
+
 
 
 const createCategoryService = async(data: ICategory)=>
