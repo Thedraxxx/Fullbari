@@ -29,7 +29,6 @@ const loginValidate = z.object({
     .min(6, "Password must be at least 6 characters")
     .max(14, "Password must not exceed 14 characters")
     .nonempty("password is required"), 
- 
 });
 
 export {registerValidate,loginValidate};
