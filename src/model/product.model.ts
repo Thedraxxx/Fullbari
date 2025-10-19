@@ -3,7 +3,7 @@ import mongoose, {Document, Model, ObjectId, Types} from "mongoose";
 import { boolean } from "zod";
 interface IProductDocument extends Document{
     productName: string;
-    slug: string;  //SEO friendly banauna routes haruma use garinxa
+    slug: string; 
     productPrice: number;
     productDiscription: string;
     productImage: string[];

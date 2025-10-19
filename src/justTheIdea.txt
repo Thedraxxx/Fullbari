@@ -1,0 +1,13 @@
+| # | Method     | Endpoint                      | Description                                                                 | Role       |
+| - | ---------- | ----------------------------- | --------------------------------------------------------------------------- | ---------- |
+| 1 | **POST**   | `/api/cart/add`               | Add a product to the user’s active cart. Creates a new cart if none exists. | 🧑‍💻 User |
+| 2 | **GET**    | `/api/cart`                   | Get all products in the logged-in user’s active cart.                       | 🧑‍💻 User |
+| 3 | **PATCH**  | `/api/cart/update/:productId` | Update the quantity of a specific product in the user’s cart.               | 🧑‍💻 User |
+| 4 | **DELETE** | `/api/cart/remove/:productId` | Remove a specific product from the user’s cart.                             | 🧑‍💻 User |
+| 5 | **DELETE** | `/api/cart/clear`             | Clear all items from the user’s active cart.                                | 🧑‍💻 User |
+| 6 | **POST**   | `/api/cart/checkout`          | Convert user’s cart to an order and mark cart as `"ordered"`.               | 🧑‍💻 User |
+| 7 | **GET**    | `/api/cart/all`               | Get all carts in the database (for management, debugging, or analytics).    | 👑 Admin   |
+| 8 | **GET**    | `/api/cart/:userId`           | Get a specific user’s cart by ID (admin view or customer support).          | 👑 Admin   |
+
+
+

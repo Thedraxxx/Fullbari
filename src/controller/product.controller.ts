@@ -59,6 +59,7 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
 });
 const fetchAllProduct = asyncHandler(async (req: Request, res: Response) => {
   const validatedQueries = querySchema.parse(req.query);
+  console.log("valid queries--",validatedQueries)
   const productData = await getProductService(validatedQueries);
   res
     .status(200)
