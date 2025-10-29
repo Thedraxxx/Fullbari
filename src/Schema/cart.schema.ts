@@ -21,12 +21,10 @@ const cartValidate = z.object({
       })
     )
     .min(1, "At least one product is required"),
-
-  totalPrice: z.coerce.number().min(0, "Total price cannot be negative"),
-
   status: z.enum(["active", "ordered"]).default("active"),
-
+  totalPrice: z.coerce.number().optional(),
   isDeleted: z.coerce.boolean().default(false),
+  totalQunatity: z.coerce.number().optional(),
 });
 
 const cartIdSchema = z.object({
@@ -37,13 +35,10 @@ const cartIdSchema = z.object({
     }),
 });
 
-
 export const updateCartSchema = cartValidate.partial();
 
-export type ICartValidate = z.infer<typeof cartValidate>;
+export type ICartData = z.infer<typeof cartValidate>;
 export type IUpdateCart = z.infer<typeof updateCartSchema>;
 export type ICartId = z.infer<typeof cartIdSchema>;
-
-
 
 export { cartValidate, cartIdSchema };

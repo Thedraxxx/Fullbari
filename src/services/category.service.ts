@@ -18,7 +18,7 @@ const createCategoryService = async(data: ICategory)=>
 
 }
 const getAllCategoryService = async()=>{
-     const categories = await Category.find({}); // fetch all to check
+   const categories = Category.find({isActive: true}).select("categoryName discription");
 console.log(categories);
 return categories
 }

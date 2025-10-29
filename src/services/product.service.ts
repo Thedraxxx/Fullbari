@@ -5,20 +5,8 @@ import { IQueries, IProductId, IUpdateProduct } from "Schema/product.schema";
 import type { FilterQuery } from "mongoose";
 import { getPublicIdsFromUrls } from "../utils/cloudnary";
 import {v2 as cloudnary} from "cloudinary"
-interface IProduct {
-  productName: string;
-  productPrice: number;
-  productDiscription: string;
-  productImage: string[];
-  productCategory: string;
-  inStock: number;
-  isAvailable: boolean;
-  rating: number;
-  numReviews: number;
-  productDiscountPrice?: number | undefined;
-  tags?: string[] | undefined;
-  isDeleted: boolean;
-}
+import { IProduct } from "types/prodcut.types";
+
 
 const createProductService = async (data: IProduct) => {
   const {

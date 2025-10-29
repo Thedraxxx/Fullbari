@@ -10,6 +10,7 @@ interface ICartSchema extends Document {
   totalPrice: number;
   status: "active" | "ordered";
   isDeleted: boolean;
+  totalQunatity: number
 }
 
 const cartSchema = new mongoose.Schema<ICartSchema>(
@@ -39,6 +40,10 @@ const cartSchema = new mongoose.Schema<ICartSchema>(
     totalPrice: {
       type: Number,
       default: 0,
+    },
+    totalQunatity: {
+      type: Number,
+      default: 0
     },
     status: {
       type: String,

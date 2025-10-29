@@ -6,8 +6,8 @@ import apiResponse from "../utils/apiResponse";
 const createCategory = asyncHandler(async(req:Request,res: Response)=>{
         const validData = categoryValidate.parse(req.body);
           const categoryData= await createCategoryService(validData);
-         return res.status(200).json(new apiResponse(200,categoryData,"category successfuly created."))
-});
+         return res.status(200).json(new apiResponse(201,categoryData,"category successfuly created."))
+}); 
 const getAllCategory = asyncHandler(async(req: Request,res: Response)=>{
       const categories = await getAllCategoryService();
       return res.status(200).json(new apiResponse(200,categories,"Categories aayo..."))
@@ -21,7 +21,7 @@ const getSingleCategory = asyncHandler(async(req: Request,res: Response)=>{
 const updateCategory = asyncHandler(async(req: Request,res: Response)=>{
       const validId = categoryIdSchema.parse(req.params);
       const ValidData = updateCategorySchema.parse(req.body);
-
+      console.log("------",{ValidData,validId})
       const updatedData = await updateCategoryService(validId,ValidData);
       return res.status(200).json(new apiResponse(200,updatedData,"Category successfully Updated"))
 });
