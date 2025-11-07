@@ -1,49 +1,95 @@
+import mongoose from "mongoose";
 import { Cart } from "../model/cart.model";
-
-import { ICartData } from "../Schema/cart.schema"
+import { ICartData } from "../Schema/cart.schema";
 import apiError from "../utils/apiErrors";
 
+const addCartService = async (data: ICartData) => {
+  try {
+    const { userId, products, status = "active", isDeleted = false } = data;
 
-const addCartService = async(data:ICartData )=>{
-     try {
-      //fist check if the product exist ...
-      //if exist increse the quntiy and the total price
-      //and not create a new doc thats it ..
-
-        const {isDeleted,products,status,userId,totalQunatity,totalPrice} =data;
-
-        
-   const existingCart  = await Cart.findById({userId, status: 'active'});
-
-  if(existingCart){
-        const existingProduct = await existingCart.products.find((item)=> item.productId.toString() === products.p)                                                                                                                                                                
-  }else{
-
-  }
-
-       const totalPriceCalculated = products.reduce((acc, item) => acc + item.quantity * item.price, 0);
-      console.log("datass",data)
-      console.log("--totaslprice",totalPriceCalculated)
-       const cart = await Cart.create({
-        userId: userId,
-        products: products,
-        totalPrice: totalPriceCalculated,
-        status: status,
-        isDeleted: isDeleted,
-       })
-     console.log("--",cart)
-       return cart;
-     } catch (error) {
-         throw new apiError(401,"Faild to add into cart")
-     }
-}
-const getCartService = async()=>{
-    try {
-        const cartDatas = await Cart.find({status: "active"}).select("userId products totalPrice status isDeleted");
-        console.log('cart----',cartDatas);
-        return cartDatas;
-    } catch (error) {
-         throw new apiError(401,"faild to fetch the cart")
+    // Step 1: Validate incoming data
+    if (!userId || !Array.isArray(products) || products.length === 0) {
+      throw new apiError(400, "Invalid cart data");
     }
-}
-export {addCartService, getCartService}
+
+    // Step 2: Find active cart
+    let existingCart = await Cart.findOne({ userId, status: "active", isDeleted: false });
+
+    // Step 3: Calculate new product total
+    const newProducts = products.map((p) => ({
+      productId: new mongoose.Types.ObjectId(p.productId),
+      quantity: p.quantity,
+      price: p.price,
+    }));
+
+    if (existingCart) {
+      // Debug log
+      console.log("🛒 Updating existing cart:", existingCart._id);
+
+      // Update or add each new product
+      for (const newProduct of newProducts) {
+        const index = existingCart.products.findIndex(
+          (item) => item.productId.toString() === newProduct.productId.toString()
+        );
+
+        if (index !== -1) {
+          // ✅ Update existing product quantity and price
+          existingCart.products[index].quantity += newProduct.quantity;
+          existingCart.products[index].price = newProduct.price;
+        } else {
+          // 🆕 Add new product
+          existingCart.products.push(newProduct);
+        }
+      }
+
+      // Step 4: Recalculate total price and total quantity
+      existingCart.totalPrice = existingCart.products.reduce(
+        (acc, item) => acc + item.quantity * item.price,
+        0
+      );
+
+      existingCart.totalQunatity = existingCart.products.reduce(
+        (acc, item) => acc + item.quantity,
+        0
+      );
+
+      // Step 5: Save the updated cart
+      await existingCart.save();
+      console.log("✅ Cart updated successfully:", existingCart._id);
+      return existingCart;
+    } else {
+      // 🆕 Step 6: Create new cart
+      const totalPrice = newProducts.reduce((acc, item) => acc + item.quantity * item.price, 0);
+      const totalQuantity = newProducts.reduce((acc, item) => acc + item.quantity, 0);
+
+      const newCart = await Cart.create({
+        userId,
+        products: newProducts,
+        totalPrice,
+        totalQuantity,
+        status,
+        isDeleted,
+      });
+
+      console.log("🆕 New cart created:", newCart._id);
+      return newCart;
+    }
+  } catch (error: any) {
+    console.error("❌ Add to cart error:", error.message || error);
+    throw new apiError(500, error.message || "Failed to add to cart");
+  }
+};
+
+
+const getCartService = async () => {
+  try {
+    const cartDatas = await Cart.find({ status: "active" }).select(
+      "userId products totalPrice status isDeleted"
+    );
+    console.log("cart----", cartDatas);
+    return cartDatas;
+  } catch (error) {
+    throw new apiError(401, "faild to fetch the cart");
+  }
+};
+export { addCartService, getCartService };

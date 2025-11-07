@@ -1,25 +1,29 @@
 import mongoose, { Model, Document } from "mongoose";
-import apiError from "../utils/apiErrors";
 import { StringValue } from "ms";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { envConfig } from "../config/cofig";
 interface IUser extends Document {
-  fullName: string;
   phoneNumber: string;
   email: string;
   password: string;
   role: string;
   refreshToken: string;
+  userName: string,
   isPasswordCorrect(password: string): Promise<boolean>;
   generateRefreshToken(): string;
   generateAccessToken(): string;
 }
 const userSchema = new mongoose.Schema<IUser>(
   {
-    fullName: {
+    userName: {
       type: String,
+      unique: true,
+      lowercase: true,
       required: true,
+      minlength: [3,"username must be atleast 3 characters long"],
+      maxlength: [10,'usernmae must be less then 10 characters'],
+      match: [/^[a-z0-9_]+$/, "Username can only contain lowercase letters, numbers and underscores"],
     },
 
     phoneNumber: {
@@ -68,7 +72,7 @@ userSchema.methods.generateAccessToken = function (this: IUser) {
   return jwt.sign(
     {
       _id: this._id,
-      fullName: this.fullName,
+      userName: this.userName,
       email: this.email,
       role: this.role
     },
@@ -82,7 +86,7 @@ userSchema.methods.generateRefreshToken = function (this: IUser) {
   return jwt.sign(
     {
       _id: this.id,
-      fullName: this.fullName,
+      userName: this.userName,
       email: this.email,
       role: this.role,
     },

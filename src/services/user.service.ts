@@ -3,7 +3,7 @@ import User from "../model/user.model";
 import { envConfig } from "../config/cofig";
 import { CookieOptions } from "express";
 interface IUser {
-  fullName: string;
+  userName: string;
   phoneNumber: string;
   email: string;
   password: string;
@@ -14,7 +14,7 @@ const register = async (data: IUser) => {
     if (data === undefined) {
       throw new apiError(400, "undefined aairaxa");
     }
-    const { fullName, phoneNumber, email, password } = data;
+    const { userName, phoneNumber, email, password } = data;
     try {
       const existingUser = await User.findOne({ email: email });
       if (existingUser) {
@@ -22,7 +22,7 @@ const register = async (data: IUser) => {
       }
       // console.log(existingUser)
       const user = await User.create({
-        fullName,
+        userName,
         phoneNumber,
         email,
         password,
@@ -68,8 +68,8 @@ const login = async (data: { email: string; password: string }) => {
   const options: CookieOptions = {
     httpOnly: true ,
     secure: envConfig.node_env === "production"? true : false,
-    sameSite: "none",  // Added this line for cross-domain cookie transmission
-    maxAge: 24 * 60 * 60 * 1000 // or whatever expiration you prefer
+    sameSite: "none", 
+    maxAge: 24 * 60 * 60 * 1000 
   };
   return {
     user: safeLoggedUser,

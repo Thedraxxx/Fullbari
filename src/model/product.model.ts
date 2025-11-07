@@ -45,7 +45,7 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       required: true,
     },
     productImage: {
-      type: [String], // Cloudinary URLs
+      type: [String],
       required: true,
     },
     productCategory: {

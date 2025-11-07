@@ -7,7 +7,8 @@ import cors from "cors"
 import { cartRouter } from "./src/routes/cart.routes";
 const app = express();
 app.use(cors({
-    origin: "*"
+    origin: "http://localhost:3000",
+    credentials: true,  
 }))
 app.use(express.json({limit: "1mb"}));
 app.use("/api/v2/users",userRouter);

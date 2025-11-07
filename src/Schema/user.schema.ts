@@ -1,11 +1,16 @@
 import { z } from "zod";
 
 const registerValidate = z.object({
-  fullName: z
+   userName: z
     .string()
-    .min(4, "Full name must be at least 4 characters")
-    .max(30, "Full name must not exceed 30 characters")
-    .nonempty("Full name is required"),
+    .trim()
+    .min(3, "Username must be at least 3 characters long")
+    .max(10, "Username must not exceed 10 characters")
+    .regex(/^[a-z0-9_]+$/, {
+      message:
+        "Username can only contain lowercase letters, numbers and underscores",
+    })
+    .nonempty("Username is required"),
 
   phoneNumber: z.string().trim().regex(/^(97|98)\d{8}$/, {
     message: "Phone number must be valid with 97 or 98 or having 10 digit",
