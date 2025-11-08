@@ -6,6 +6,6 @@ const userRouter = Router();
 
 userRouter.route("/register").post(userRegister);
 userRouter.route("/login").post(userLogin);
-userRouter.route("/logout").delete(jwtVerify,userLogout)
+userRouter.route("/logout").post(jwtVerify,userLogout)
 
 export default userRouter;
