@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
-import { envConfig } from "../config/cofig";
+import { envConfig } from "../config/config";
  
 cloudinary.config({
     cloud_name: envConfig.cloud_name,

@@ -1,5 +1,5 @@
 import apiError from "../utils/apiErrors";
-import { envConfig } from "../config/cofig";
+import { envConfig } from "../config/config";
 import { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 

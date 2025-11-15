@@ -2,7 +2,7 @@ import mongoose, { Model, Document } from "mongoose";
 import { StringValue } from "ms";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { envConfig } from "../config/cofig";
+import { envConfig } from "../config/config";
 interface IUser extends Document {
   phoneNumber: string;
   email: string;
@@ -64,7 +64,10 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.isPasswordCorrect = async function (password: string) {
+  console.log("entered password",password);
+  console.log("database password",this.password)
   const isValid = await bcrypt.compare(password, this.password);
+  console.log("milyo",isValid)
   return isValid;
 };
 

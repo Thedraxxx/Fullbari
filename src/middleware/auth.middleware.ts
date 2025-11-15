@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "../utils/asyncHandler";
 import apiError from "../utils/apiErrors";
-import { envConfig } from "../config/cofig";
+import { envConfig } from "../config/config";
 import { Request,Response, NextFunction } from "express";
 import User from "../model/user.model";
 interface IRequest extends Request {

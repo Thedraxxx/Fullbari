@@ -1,5 +1,5 @@
 import app from "./app";
-import { envConfig } from "./src/config/cofig";
+import { envConfig } from "./src/config/config";
 import connectDB from "./src/database/connect";
 
 connectDB()
