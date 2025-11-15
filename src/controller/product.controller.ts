@@ -23,14 +23,12 @@ import { ZodError } from "zod";
 
 const insertProduct = asyncHandler(async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
-  //  console.log(req.body)
-  // console.log(req.files);
   if (!files || files.length === 0) {
     throw new apiError(401, "Product images are required");
   }
 
   const imagePaths = files.map((file) => file.path);
-  // console.log("Uploaded paths:", imagePaths);
+
 
   const uploadedURLs: string[] = [];
 
@@ -40,16 +38,16 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
       uploadedURLs.push(url);
     }
   }
-  //  console.log(uploadedURLs)
+
   if (uploadedURLs.length === 0) {
     throw new apiError(401, "Failed to upload images to Cloudinary.");
   }
 
-  //  Attach uploaded image URLs to req.body before validation
+
   req.body.productImage = uploadedURLs;
 
   const validProduct = productValidate.parse(req.body);
-  // console.log("Valid vayo");
+
 
   const productData = await createProductService(validProduct);
 
@@ -59,7 +57,6 @@ const insertProduct = asyncHandler(async (req: Request, res: Response) => {
 });
 const fetchAllProduct = asyncHandler(async (req: Request, res: Response) => {
   const validatedQueries = querySchema.parse(req.query);
-  console.log("valid queries--",validatedQueries)
   const productData = await getProductService(validatedQueries);
   res
     .status(200)

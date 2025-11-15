@@ -27,7 +27,7 @@ const register = async (data: IUser) => {
         email,
         password,
       });
-      
+
       const existedUser = await User.findOne({ _id: user._id }).select(
         " -password "
       );
@@ -43,13 +43,9 @@ const register = async (data: IUser) => {
 };
 const login = async (data: { email: string; password: string }) => {
   const { email, password } = data;
-
-
-
   const existedUser = await User.findOne({ email: email }).select("+password"); // kinavana maila model ma select false garya xu for security reason
-    console.log("Entered password:", password);
-console.log("Stored hash:", existedUser?.password)
-;if (!existedUser) {
+
+  if (!existedUser) {
     throw new apiError(404, "User not found !");
   }
   const validPasswoed = await existedUser.isPasswordCorrect(password);
@@ -69,18 +65,18 @@ console.log("Stored hash:", existedUser?.password)
     refreshToken: _refreshToken,
     ...safeLoggedUser
   } = loggedUser;
-  
+
   const options: CookieOptions = {
-    httpOnly: true ,
-    secure: envConfig.node_env === "production"? true : false,
-    sameSite: "none", 
-    maxAge: 24 * 60 * 60 * 1000 
+    httpOnly: true,
+    secure: envConfig.node_env === "production" ? true : false,
+    sameSite: "none",
+    maxAge: 24 * 60 * 60 * 1000,
   };
   return {
     user: safeLoggedUser,
     accessToken,
     refreshToken,
-    options
+    options,
   };
 };
 
