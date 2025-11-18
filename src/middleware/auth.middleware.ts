@@ -6,7 +6,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../model/user.model";
 
 interface IRequest extends Request {
-  user?: {
+user?: {
     email: string;
     role: string;
   };
@@ -19,31 +19,34 @@ const jwtVerify = asyncHandler(
         req.cookies?.accessToken ||
         req.header("Authorization")?.replace("Bearer ", "");
 
+      console.log("Received Token:", token);
+
       if (!token) {
         throw new apiError(401, "Authentication token missing.");
       }
-      const verifiedToken = jwt.verify(
+
+      const verifiedToken: any = jwt.verify(
         token,
         envConfig.access_token_secret as string
       );
 
-      if (typeof verifiedToken !== "string") {
-        // Find user from DB
-        const user = await User.findById(verifiedToken?._id).select(
-          "-password -refreshToken"
-        );
+      console.log("Verified Token Payload:", verifiedToken);
 
-        if (!user) {
-          throw new apiError(403, "No user found for this token");
-        }
+      const user = await User.findById(verifiedToken._id).select(
+        "-password -refreshToken"
+      );
 
-        req.user = user;
-
-        next();
+      if (!user) {
+        throw new apiError(403, "No user found for this token");
       }
-    } catch (error) {
-      throw new apiError(401, "Invalid access token");
-    }
+
+      req.user = user;
+      next();
+    }catch (error: any) {
+  console.error("JWT Verify Error:", error.message || error);
+  throw new apiError(401, error.message || "Invalid access token");
+}
+
   }
 );
 

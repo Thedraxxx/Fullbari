@@ -5,6 +5,7 @@ import apiResponse from "../utils/apiResponse";
 import { registerValidate, loginValidate } from "../Schema/user.schema";
 import User from "../model/user.model";
 import apiError from "../utils/apiErrors";
+import { envConfig } from "../config/config";
 
 const userRegister = asyncHandler(async (req: Request, res: Response) => {
   const validateRegisterData = registerValidate.parse(req.body);
@@ -26,36 +27,34 @@ const userLogin = asyncHandler(async (req: Request, res: Response) => {
     .json(new apiResponse(200, user, "user logged in successfylly"));
 });
 const userLogout = asyncHandler(async (req: Request, res: Response) => {
-  //user la logout thixhxa
-  //endpoint hit garxa .... ani jwtverify garxa ....
-  // ani logout controller ma chi User khojxa ra rafreshToken lai unset garxa
-  //and res ma cookie clear ganey both at and rt
   try {
     await User.findByIdAndUpdate(
       req.user?.id,
       {
-        // maila refreshtoken lai save garya xu so rt matra delete garnu paryo db bata
         $unset: {
           refreshToken: 1,
         },
       },
       {
-        new: true,//return updated document 
+        new: true,
       }
     );
   } catch (error) {
-      throw new apiError(500,"Faild to clear refresh Token from the database.");
+    throw new apiError(500, "Failed to clear refresh token from the database.");
   }
 
+  // Must match the options used when setting cookies
   const options: CookieOptions = {
     httpOnly: true,
-    secure: true,
-    sameSite: "strict"
+    secure: false,
+    sameSite: 'lax',
+    path: "/", // Important: must match the path used when setting
   };
+
   return res
     .status(200)
-    .clearCookie("refreshToken", options)
     .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
     .json(new apiResponse(200, {}, "Logged out successfully"));
 });
 export { userRegister, userLogin, userLogout };

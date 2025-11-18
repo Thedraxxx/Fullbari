@@ -1,6 +1,7 @@
 import express from "express";
 import errorHandler from "./src/middleware/errorHandler";
 import userRouter from "./src/routes/user.routes";
+import cookieParser from "cookie-parser";
 import { productRouter } from "./src/routes/product.routes";
 import categoryRouter from "./src/routes/category.routes";
 import cors from "cors"
@@ -9,7 +10,8 @@ const app = express();
 app.use(cors({
     origin: "http://localhost:3000",
     credentials: true,  
-}))
+}));
+app.use(cookieParser());
 app.use(express.json({limit: "1mb"}));
 app.use("/api/v2/users",userRouter);
 app.use("/api/v2/products",productRouter);
