@@ -45,8 +45,8 @@ const userLogout = asyncHandler(async (req: Request, res: Response) => {
 
   // Must match the options used when setting cookies
   const options: CookieOptions = {
-    httpOnly: true,
-    secure: false,
+    httpOnly: envConfig.node_env ==="production" ? true: false,
+    secure:  envConfig.node_env ==="production" ? true: false,
     sameSite: 'lax',
     path: "/", // Important: must match the path used when setting
   };

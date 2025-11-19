@@ -67,8 +67,8 @@ const login = async (data: { email: string; password: string }) => {
   } = loggedUser;
 
 const options: CookieOptions = {
-  httpOnly: true,
-  secure: false, 
+  httpOnly: envConfig.node_env === "production"? true : false,
+  secure: envConfig.node_env === "production"? true: false, 
  sameSite: "lax",  
   maxAge: 24 * 60 * 60 * 1000,
   path: "/", 
