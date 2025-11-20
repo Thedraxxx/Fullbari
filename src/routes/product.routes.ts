@@ -9,7 +9,7 @@ productRouter.route("/insertProduct").post(upload.array("productImage"),jwtVerif
 productRouter.route("/fetchProduct").get(upload.none(),fetchAllProduct);
 productRouter.route("/fetchProduct/:productId").get(upload.none(),fetchSingleProduct);
 productRouter.route("/deleteProduct/:productId").delete(upload.none(),jwtVerify,isAdmin,deleteProduct);
-productRouter.route("/updateProduct/:productId").patch(upload.none(),jwtVerify,isAdmin,updateProduct);
+productRouter.route("/updateProduct/:productId").patch(upload.array("productImage",3),jwtVerify,isAdmin,updateProduct);
 productRouter.route("/restoreProduct/:productId").patch(upload.none(),jwtVerify,isAdmin,restoreProduct);
 productRouter.route("/getDeletedProducts").get(upload.none(),jwtVerify,isAdmin,getDeletedProducts);
 productRouter.route("/hardDeleteProduct/:productId").delete(upload.none(),jwtVerify,isAdmin,hardDeleteProduct)

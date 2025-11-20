@@ -4,7 +4,7 @@ import z from "zod";
 const productValidate = z.object({
   productName: z.string().min(2, "Product name is too short"),
   productPrice: z.coerce.number().min(0, "Price must be at least 0"),
-  productDiscription: z.string().min(10, "Description is too short"),
+  productDescription: z.string().min(10, "Description is too short"),
   productImage: z
     .union([
       z.string().url("Invalid image URL"),

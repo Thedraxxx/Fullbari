@@ -5,7 +5,7 @@ interface IProductDocument extends Document{
     productName: string;
     slug: string; 
     productPrice: number;
-    productDiscription: string;
+    productDescription: string;
     productImage: string[];
     productDiscountPrice?: number;
     productCategory: Types.ObjectId;
@@ -40,7 +40,7 @@ const productScehma = new mongoose.Schema<IProductDocument>(
       type: Number,
       min: 0,
     },
-    productDiscription: {
+    productDescription: {
       type: String,
       required: true,
     },
@@ -80,7 +80,7 @@ const productScehma = new mongoose.Schema<IProductDocument>(
 },{timestamps: true});
 productScehma.index({
   productName:"text",
-  productDiscription: "text",
+  productDescription: "text",
   tags: "text"
 });
 productScehma.index({

@@ -12,7 +12,7 @@ const createProductService = async (data: IProduct) => {
   const {
     productName,
     productPrice,
-    productDiscription,
+    productDescription,
     productImage,
     productDiscountPrice,
     productCategory,
@@ -36,7 +36,7 @@ const createProductService = async (data: IProduct) => {
     productName,
     slug,
     productPrice,
-    productDiscription,
+    productDescription,
     productImage,
     productDiscountPrice,
     productCategory,
@@ -160,7 +160,7 @@ const updateProductService = async (
   const {
     productName,
     productPrice,
-    productDiscription,
+    productDescription,
     productImage,
     productDiscountPrice,
     productCategory,
@@ -177,7 +177,7 @@ const updateProductService = async (
   const updateData: Record<string, any> = {
     productName,
     productPrice,
-    productDiscription,
+    productDescription,
     productImage,
     productDiscountPrice,
     productCategory,
@@ -243,9 +243,7 @@ const hardDeleteService = async(params: IProductId)=>{
      if(!product){
       throw new apiError(404,"Product is not Found.");
      }
-     if(product.isDeleted === false){
-       throw new apiError(400,"Product is not softly deleted")
-     }
+   
      const imagePublicIds = getPublicIdsFromUrls(product.productImage);
      for(const publicId of imagePublicIds){
       try {
