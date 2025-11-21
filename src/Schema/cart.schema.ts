@@ -16,15 +16,17 @@ const cartValidate = z.object({
           .refine((id) => mongoose.Types.ObjectId.isValid(id), {
             message: "Invalid product ID format",
           }),
+          productName: z.coerce.string().optional(),
         quantity: z.coerce.number().int().min(1, "Quantity must be at least 1"),
-        price: z.coerce.number().min(0, "Price must be 0 or more"),
+      price: z.any().optional(),
+
       })
     )
     .min(1, "At least one product is required"),
-  status: z.enum(["active", "ordered"]).default("active"),
+  status: z.enum(["active", "ordered","abandoned"]).default("active"),
   totalPrice: z.coerce.number().optional(),
   isDeleted: z.coerce.boolean().default(false),
-  totalQunatity: z.coerce.number().optional(),
+  totalQuantity: z.coerce.number().optional(),
 });
 
 const cartIdSchema = z.object({

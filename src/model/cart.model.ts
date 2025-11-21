@@ -8,9 +8,9 @@ interface ICartSchema extends Document {
     price: number;
   }[];
   totalPrice: number;
-  status: "active" | "ordered";
+  status: "active" | "ordered" |"abandoned";
   isDeleted: boolean;
-  totalQunatity: number
+  totalQuantity: number
 }
 
 const cartSchema = new mongoose.Schema<ICartSchema>(
@@ -22,6 +22,7 @@ const cartSchema = new mongoose.Schema<ICartSchema>(
     },
     products: [
       {
+   
         productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
@@ -30,10 +31,12 @@ const cartSchema = new mongoose.Schema<ICartSchema>(
         quantity: {
           type: Number,
           default: 1,
+          min:1,
         },
         price: {
           type: Number,
           required: true,
+          min: 0
         },
       },
     ],
@@ -41,13 +44,13 @@ const cartSchema = new mongoose.Schema<ICartSchema>(
       type: Number,
       default: 0,
     },
-    totalQunatity: {
+    totalQuantity: {
       type: Number,
       default: 0
     },
     status: {
       type: String,
-      enum: ["active", "ordered"],
+      enum: ["active", "ordered","abandoned"],
       default: "active",
     },
     isDeleted: {
@@ -57,6 +60,20 @@ const cartSchema = new mongoose.Schema<ICartSchema>(
   },
   { timestamps: true }
 );
+cartSchema.pre("save", function (next) {
+  this.totalPrice = this.products.reduce(
+    (sum, p) => sum + p.quantity * p.price,
+    0
+  );
+
+  this.totalQuantity = this.products.reduce(
+    (sum, p) => sum + p.quantity,
+    0
+  );
+
+  next();
+});
+
 
 const Cart = mongoose.model<ICartSchema>("Cart", cartSchema);
 
